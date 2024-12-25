@@ -218,20 +218,6 @@ public class TaskManager implements ITaskManager {
 
     }
 
-    @Override
-    public Task createTask(Task task) {
-        return new Task(task.getName(), task.getDescription(), task.getStatus());
-    }
-
-    @Override
-    public Epic createEpic(Epic epic) {
-        return new Epic(epic.getName(), epic.getDescription(), epic.getStatus());
-    }
-
-    @Override
-    public Subtask createSubtask(Subtask subtask) {
-        return new Subtask(subtask.getName(), subtask.getDescription(), subtask.getStatus(), subtask.getEpicId());
-    }
 
 }
 

@@ -45,9 +45,5 @@ public interface ITaskManager {
 
     void changeEpicStatus(int epicId);
 
-    Task createTask(Task task);
 
-    Epic createEpic(Epic epic);
-
-    Subtask createSubtask(Subtask subtask);
 }
