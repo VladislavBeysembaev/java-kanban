@@ -66,11 +66,11 @@ public class Main {
 
 
         //Подзадачи со статусом NEW И DONE
-        Subtask sub1 = manager.createSubtask(new Subtask("Сабтаска 1 ", "Описание сабтаски1",
-                TaskStatus.NEW, 4));
+        Subtask sub1 = new Subtask("Сабтаска 1 ", "Описание сабтаски1",
+                TaskStatus.NEW, 4);
         manager.addSubtask(sub1);
-        Subtask sub2 = manager.createSubtask(new Subtask("Сабтаска 2 ", "Описание сабтаски2",
-                TaskStatus.DONE, 4));
+        Subtask sub2 = new Subtask("Сабтаска 2 ", "Описание сабтаски2",
+                TaskStatus.DONE, 4);
         manager.addSubtask(sub2);
 
 
@@ -78,11 +78,11 @@ public class Main {
 
 
 //Подзадачи со статусом IN_PROGRESS
-        Subtask sub3 = manager.createSubtask(new Subtask("Сабтаска3", "Описание сабтаски3",
-                TaskStatus.IN_PROGRESS, 4));
+        Subtask sub3 = new Subtask("Сабтаска3", "Описание сабтаски3",
+                TaskStatus.IN_PROGRESS, 4);
         manager.addSubtask(sub3);
-        Subtask sub4 = manager.createSubtask(new Subtask("Сабтаска4", "Описание сабтаски 4",
-                TaskStatus.IN_PROGRESS, 4));
+        Subtask sub4 = new Subtask("Сабтаска4", "Описание сабтаски 4",
+                TaskStatus.IN_PROGRESS, 4);
         manager.addSubtask(sub4);
 
         System.out.println(manager.getEpicById(4).getStatus());
