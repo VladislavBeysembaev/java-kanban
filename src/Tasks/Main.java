@@ -16,13 +16,11 @@ public class Main {
         manager.addEpic(epic2);
 
         Subtask subtask1 = new Subtask("Subtask1", "Subtask1 Description",
-                TaskStatus.DONE, 3 );
+                TaskStatus.DONE, 3);
         manager.addSubtask(subtask1);
         Subtask subtask2 = new Subtask("Subtask2", "Subtask2 Description",
                 TaskStatus.DONE, 3);
         manager.addSubtask(subtask2);
-
-
 
 
         //проверяю создание таски, эпика и сабтаски
@@ -31,7 +29,7 @@ public class Main {
         ArrayList<Epic> epic4 = manager.getEpicList();
         System.out.println("Получение epic4 " + epic4);
         ArrayList<Subtask> subtask4 = manager.getSubtaskList();
-        System.out.println("Получение subtask4 "+subtask4);
+        System.out.println("Получение subtask4 " + subtask4);
 
         //проверяю метод get по Id, для task, epic и subtask
         Task task5 = manager.getTaskById(2);
@@ -62,7 +60,7 @@ public class Main {
         System.out.println("Обновление epic7 " + manager.getEpicList());
 
         Subtask subtask7 = new Subtask("Subtask300", "Subtask300 description",
-                TaskStatus.IN_PROGRESS, 6,4);
+                TaskStatus.IN_PROGRESS, 6, 4);
         manager.updateSubtask(subtask7);
         System.out.println("Обновление subtask7" + manager.getSubtaskList());
 
@@ -88,6 +86,15 @@ public class Main {
         manager.addSubtask(sub4);
 
         System.out.println(manager.getEpicById(4).getStatus());
+
+
+//Удаление всех тасков, сабстасков и эпиков
+        manager.deleteSubtasks();
+        System.out.println("Удалил все сабтаски, должно быть пусто в списке" + manager.getSubtaskList());
+        manager.deleteEpics();
+        System.out.println("Удалил все эпики, должно быть пусто в списке" + manager.getEpicList());
+        manager.deleteTasks();
+        System.out.println("Удалил все таски, должно быть пусто в списке" + manager.getTaskList() );
 
     }
 
