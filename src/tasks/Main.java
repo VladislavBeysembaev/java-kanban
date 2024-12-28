@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 import java.util.ArrayList;
 
@@ -16,12 +16,11 @@ public class Main {
         manager.addEpic(epic2);
 
         Subtask subtask1 = new Subtask("Subtask1", "Subtask1 Description",
-                TaskStatus.DONE, 3);
+                TaskStatus.DONE, 3, 3);
         manager.addSubtask(subtask1);
         Subtask subtask2 = new Subtask("Subtask2", "Subtask2 Description",
-                TaskStatus.DONE, 3);
+                TaskStatus.DONE, 3, 3);
         manager.addSubtask(subtask2);
-
 
         //проверяю создание таски, эпика и сабтаски
         ArrayList<Task> task4 = manager.getTaskList();
@@ -58,12 +57,10 @@ public class Main {
         Epic epic7 = new Epic("Epic500", "Epic500 description", TaskStatus.DONE, 4, epicList);
         manager.updateEpic(epic7);
         System.out.println("Обновление epic7 " + manager.getEpicList());
-
         Subtask subtask7 = new Subtask("Subtask300", "Subtask300 description",
-                TaskStatus.IN_PROGRESS, 6, 4);
+                TaskStatus.IN_PROGRESS, 3, 5);
         manager.updateSubtask(subtask7);
         System.out.println("Обновление subtask7" + manager.getSubtaskList());
-
 
         //Подзадачи со статусом NEW И DONE
         Subtask sub1 = new Subtask("Сабтаска 1 ", "Описание сабтаски1",
@@ -72,10 +69,7 @@ public class Main {
         Subtask sub2 = new Subtask("Сабтаска 2 ", "Описание сабтаски2",
                 TaskStatus.DONE, 4);
         manager.addSubtask(sub2);
-
-
         System.out.println(manager.getEpicById(4).getStatus());
-
 
 //Подзадачи со статусом IN_PROGRESS
         Subtask sub3 = new Subtask("Сабтаска3", "Описание сабтаски3",
@@ -84,9 +78,7 @@ public class Main {
         Subtask sub4 = new Subtask("Сабтаска4", "Описание сабтаски 4",
                 TaskStatus.IN_PROGRESS, 4);
         manager.addSubtask(sub4);
-
         System.out.println(manager.getEpicById(4).getStatus());
-
 
 //Удаление всех тасков, сабстасков и эпиков
         manager.deleteSubtasks();
@@ -94,9 +86,7 @@ public class Main {
         manager.deleteEpics();
         System.out.println("Удалил все эпики, должно быть пусто в списке" + manager.getEpicList());
         manager.deleteTasks();
-        System.out.println("Удалил все таски, должно быть пусто в списке" + manager.getTaskList() );
+        System.out.println("Удалил все таски, должно быть пусто в списке" + manager.getTaskList());
 
     }
-
-
 }

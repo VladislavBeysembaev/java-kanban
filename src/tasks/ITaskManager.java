@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,8 @@ public interface ITaskManager {
 
     void addEpic(Epic epic);
 
-    void addSubtask(Subtask subtask);
+
+    Integer addSubtask(Subtask subtask);
 
     ArrayList<Task> getTaskList();
 
@@ -42,8 +43,6 @@ public interface ITaskManager {
     void deleteSubtaskById(int idNumber);
 
     ArrayList<Subtask> subtasksList(int idNumber);
-
-    void changeEpicStatus(int epicId);
 
 
 }
