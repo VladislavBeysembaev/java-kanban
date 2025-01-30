@@ -16,11 +16,15 @@ public class Task {
         this.status = status;
     }
 
-    public Task(String name, String description, TaskStatus status, int id) {
+ private Task(String name, String description, TaskStatus status, Integer id) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.id = id;
+    }
+
+    public Task getSnapshot(){
+        return new Task(this.getName(), this.getDescription(), this.getStatus(), this.getId());
     }
 
     public int getId() {

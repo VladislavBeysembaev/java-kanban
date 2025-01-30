@@ -1,16 +1,21 @@
-package tasks;
+package managers;
+
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public interface ITaskManager {
-
-
-    void addTask(Task task);
-
-    void addEpic(Epic epic);
+public interface TaskManager {
 
 
-    Integer addSubtask(Subtask subtask);
+    Task addTask(Task task);
+
+    Epic addEpic(Epic epic);
+
+
+    Subtask addSubtask(Subtask subtask);
 
     ArrayList<Task> getTaskList();
 
@@ -30,11 +35,11 @@ public interface ITaskManager {
 
     Subtask getSubtaskById(int idNumber);
 
-    void updateTask(Task task);
+    Task updateTask(Task task);
 
-    void updateEpic(Epic epic);
+    Epic updateEpic(Epic epic);
 
-    void updateSubtask(Subtask subtask);
+    Subtask updateSubtask(Subtask subtask);
 
     void deleteTaskById(int idNumber);
 
@@ -42,7 +47,7 @@ public interface ITaskManager {
 
     void deleteSubtaskById(int idNumber);
 
-    ArrayList<Subtask> subtasksList(int idNumber);
+    ArrayList<Subtask> getSubtasksList(int idNumber);
 
-
+    List<Task> getHistory();
 }
