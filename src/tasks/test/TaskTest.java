@@ -14,7 +14,6 @@ class TaskTest {
     Task task1 = new Task("Test addNewTask", "Test addNewTask description.",
             TaskStatus.NEW); //создаем задачу
 
-
     @BeforeEach
     void BeforeEach() {
         manager = Managers.getDefaultTaskManager();
