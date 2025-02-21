@@ -16,6 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
     private int generatorId = 0;
 
 
+
     @Override
     public Task addTask(Task task) {
         task.setId(++generatorId);
@@ -31,6 +32,7 @@ public class InMemoryTaskManager implements TaskManager {
         changeEpicStatus(epic.getId());
         return epic;
     }
+
 
 
     @Override
@@ -93,7 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int idNumber) {
         Task task = tasks.get(idNumber);
-        historyManager.addTask(task);
+            historyManager.addTask(task);
         return task;
     }
 
@@ -116,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.containsKey(task.getId())) {
             tasks.put(task.getId(), task);
         }
-  return task;
+        return task;
     }
 
     @Override
@@ -210,9 +212,8 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStatus(status);
 
     }
-
     @Override
-    public List<Task> getHistory() {
+    public List<Task> getHistory(){
         return historyManager.getHistory();
     }
 

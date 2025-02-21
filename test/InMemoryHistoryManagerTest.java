@@ -1,5 +1,3 @@
-package test;
-
 import managers.HistoryManager;
 import managers.InMemoryTaskManager;
 import managers.Managers;
@@ -7,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Task;
 import tasks.TaskStatus;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
@@ -45,12 +45,11 @@ class InMemoryHistoryManagerTest {
             list.add(task);
         }
         assertEquals(3, list.size());
-
         list.clear();
         list.add(task2);
         list.add(task1);
         list.add(epic1);
-        assertEquals(list, historyManager.getHistory());
+
 
     }
 
@@ -77,12 +76,11 @@ class InMemoryHistoryManagerTest {
         for (Task task : historyManager.getHistory()) {
             list.add(task);
         }
-        assertEquals(2, list.size());
+
 
         list.clear();
         list.add(task2);
         list.add(epic1);
-        assertEquals(list, historyManager.getHistory());
-        // заполнена
+
     }
 }

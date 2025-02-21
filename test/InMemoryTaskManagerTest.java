@@ -1,5 +1,3 @@
-package test;
-
 import managers.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.*;
