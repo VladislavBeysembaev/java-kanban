@@ -15,7 +15,7 @@ class TaskTest {
             TaskStatus.NEW); //создаем задачу
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         manager = Managers.getDefaultTaskManager();
     }
 
