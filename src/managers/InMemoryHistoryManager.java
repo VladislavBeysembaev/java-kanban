@@ -18,6 +18,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         historyStorage.add(task.getSnapshot());
         if (historyStorage.size() == 10){
+
             historyStorage.remove(0);
         }
     }
