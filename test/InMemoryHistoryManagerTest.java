@@ -1,6 +1,8 @@
 import managers.HistoryManager;
+import managers.InMemoryHistoryManager;
 import managers.InMemoryTaskManager;
 import managers.Managers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Task;
@@ -11,76 +13,91 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryHistoryManagerTest {
-    public HistoryManager historyManager = Managers.getDefaultHistoryManager();      //переменная для хранения
-    InMemoryTaskManager memoryManager = new InMemoryTaskManager(); // истории просмотров
-    Task task1 = new Task("Task1", "Description Task1 ", TaskStatus.NEW);
-    Task task2 = new Task("Task1", "Description Task1 ", TaskStatus.NEW);
-    Epic epic1 = new Epic("Epic1", "Description Epic1 ", TaskStatus.NEW);
-    List list = new ArrayList<>();
+public class InMemoryHistoryManagerTest {
+    private InMemoryHistoryManager historyManager;
 
-    @Test
-    void addTaskTest() {
-        assertEquals(list, historyManager.getHistory());
-        assertNotNull(historyManager.getHistory());
-        memoryManager.addEpic(epic1);
-        historyManager.addTask(task1);
-        list.add(task1);
-        assertEquals(list, historyManager.getHistory());
+    @BeforeEach
+    public void setUp() {
+        historyManager = new InMemoryHistoryManager();
     }
 
     @Test
-    void getHistoryTest() {
-        list.clear();
-        assertEquals(list, historyManager.getHistory());
-        assertNotNull(historyManager.getHistory());
-        memoryManager.addTask(task2);
-        memoryManager.addTask(task1);
-        memoryManager.addEpic(epic1);
-        historyManager.addTask(task2);
-        historyManager.addTask(task1);
-        historyManager.addTask(epic1);
-
-        for (Task task : historyManager.getHistory()) {
-            list.add(task);
-        }
-        assertEquals(3, list.size());
-        list.clear();
-        list.add(task2);
-        list.add(task1);
-        list.add(epic1);
-
-
+    public void addTaskToHistory() {
+        Task task = new Task("Task", "Description", TaskStatus.NEW);
+        task.setId(1);
+        historyManager.addTask(task);
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size());
+        assertEquals(task, history.getFirst());
     }
 
     @Test
-    void removeTest() {
-        list.clear();
-        assertEquals(list, historyManager.getHistory());
-        assertNotNull(historyManager.getHistory());
-        memoryManager.addTask(task2);
-        memoryManager.addTask(task1);
-        memoryManager.addEpic(epic1);
-        historyManager.addTask(task2);
+    public void removeTaskFromHistory() {
+        Task task1 = new Task("Task 1", "Description 1", TaskStatus.NEW);
+        task1.setId(1);
+        Task task2 = new Task("Task 2", "Description 2", TaskStatus.NEW);
+        task2.setId(2);
+
         historyManager.addTask(task1);
-        historyManager.addTask(epic1);
-
-        for (Task task : historyManager.getHistory()) {
-            list.add(task);
-        }
-        assertEquals(3, list.size());
-
+        historyManager.addTask(task2);
         historyManager.remove(task1.getId());
 
-        list.clear();
-        for (Task task : historyManager.getHistory()) {
-            list.add(task);
-        }
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size());
+        assertEquals(task2, history.getFirst());
+    }
 
+    @Test
+    public void getEmptyHistory() {
+        List<Task> history = historyManager.getHistory();
+        assertTrue(history.isEmpty());
+    }
 
-        list.clear();
-        list.add(task2);
-        list.add(epic1);
+    @Test
+    public void linkLast() {
+        Task task1 = new Task("Test Task 1", "Description 1", TaskStatus.NEW);
+        task1.setId(1);
+        Task task2 = new Task("Test Task 2", "Description 2", TaskStatus.NEW);
+        task2.setId(2);
 
+        historyManager.addTask(task1);
+        historyManager.addTask(task2);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(2, history.size());
+        assertEquals(task1, history.get(0));
+        assertEquals(task2, history.get(1));
+    }
+
+    @Test
+    public void removeNode() {
+        Task task1 = new Task("Task 1", "Description 1", TaskStatus.NEW);
+        task1.setId(1);
+        Task task2 = new Task("Task 2", "Description 2", TaskStatus.NEW);
+        task2.setId(2);
+        Task task3 = new Task("Task 3", "Description 3", TaskStatus.NEW);
+        task3.setId(3);
+
+        historyManager.addTask(task1);
+        historyManager.addTask(task2);
+        historyManager.addTask(task3);
+        historyManager.remove(task2.getId());
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(2, history.size());
+        assertEquals(task1, history.get(0));
+        assertEquals(task3, history.get(1));
+    }
+
+    @Test
+    public void addSameTask() {
+        Task task = new Task("Task", "Description", TaskStatus.NEW);
+        task.setId(1);
+        historyManager.addTask(task);
+        historyManager.addTask(task);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size());
+        assertEquals(task, history.get(0));
     }
 }

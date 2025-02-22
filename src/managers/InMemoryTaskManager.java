@@ -36,9 +36,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask addSubtask(Subtask subtask) {
-        if (subtask.getId() > 0 || subtask.getEpicId() == 0 || !epics.containsKey(subtask.getEpicId())) {               //если такой субтаск уже существует
-            return subtask;
-        }
         final int id = ++generatorId;
         subtask.setId(id);
         subTasks.put(subtask.getId(), subtask);
@@ -68,7 +65,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTasks() {
-
         tasks.clear();
     }
 
@@ -219,10 +215,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
 
     public List<Task> getHistory() {
-
         return historyManager.getHistory();
     }
-
 
 }
 
