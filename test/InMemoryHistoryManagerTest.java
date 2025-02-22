@@ -54,7 +54,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void linkLast() {
+    public void getLastLink() {
         Task task1 = new Task("Test Task 1", "Description 1", TaskStatus.NEW);
         task1.setId(1);
         Task task2 = new Task("Test Task 2", "Description 2", TaskStatus.NEW);
