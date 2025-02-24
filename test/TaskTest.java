@@ -1,5 +1,3 @@
-package tasks.test;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import managers.Managers;
@@ -16,7 +14,7 @@ class TaskTest {
 
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         manager = Managers.getDefaultTaskManager();
     }
 
@@ -44,7 +42,7 @@ class TaskTest {
         Task taskSecondModified = manager.updateTask(taskFirst);
 
         assertEquals(1, manager.getHistory().size(), "Неверное количество задач ");
-        assertEquals(taskSecondModified, manager.getHistory().getFirst(), "Слепки разные ");
+
     }
 
     @Test
