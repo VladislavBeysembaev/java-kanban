@@ -71,16 +71,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpics() {
         for (Epic epic : epics.values()) { // удаление эпиков из истории
-            int i = epic.getId();
-            if (historyManager.getHistory().contains(i)) {
-                historyManager.remove(i);
-            }
+            historyManager.remove(epic.getId());
         }
         for (Subtask subtask : subTasks.values()) { // удаление подзадач из истории
-            int i = subtask.getId();
-            if (historyManager.getHistory().contains(i)) {
-                historyManager.remove(i);
-            }
+            historyManager.remove(subtask.getId());
         }
         epics.clear();
         subTasks.clear();
@@ -157,27 +151,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(int id) {
-
-        if (tasks.containsKey(id)) {
-            historyManager.remove(id);
-            tasks.remove(id);
-        } else if (subTasks.containsKey(id)) {
-            Subtask subtask = subTasks.get(id);
-            Epic epic = epics.get(subtask.getEpicId());
-
-            historyManager.remove(id);
-            deleteSubtasks();
-            subTasks.remove(id);
-            changeEpicStatus(epic.getId());
-        } else if (epics.containsKey(id)) {
-            Epic epic = epics.get(id);
-            for (Subtask subtask : getSubtaskList()) {
-                historyManager.remove(subtask.getId());
-            }
-            historyManager.remove(id);
-            deleteSubtasks();
-            epics.remove(id);
-        }
+        historyManager.remove(id);
+        tasks.remove(id);
+        Subtask subtask = subTasks.get(id);
+        Epic epic = epics.get(subtask.getEpicId());
+        historyManager.remove(epic.getId());
+        deleteSubtasks();
+        subTasks.remove(id);
+        changeEpicStatus(epic.getId());
+        historyManager.remove(subtask.getId());
+        epics.remove(id);
     }
 
     @Override
