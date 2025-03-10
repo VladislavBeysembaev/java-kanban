@@ -49,8 +49,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException, IllegalArgumentException {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
-        setIdCounter(2); //Объясни пожалуйста, почему без этого метода айди в тестах не совпадает
-        //Мне подсказали как реализовать, но саму суть я не до конца понял
+        // setIdCounter(4); //Объясни пожалуйста, почему без метода вначале строки у нас айди повышается само по себе
+        //но при добавлении этого метода, выдает просто какой-то рандом? Из-за этого не дописал тест( причем если
+        //я отдельно запускаю тест, то все работает, а все вместе нет
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             reader.readLine(); // Пропускаем заголовок
