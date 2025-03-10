@@ -1,5 +1,7 @@
 package tasks;
 
+import fileManagers.TaskType;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -16,6 +18,7 @@ public class Epic extends Task {
         super(name, description, status);
         this.subtaskId = subtaskId;
     }
+
 
     public ArrayList<Integer> getSubtaskId() {
         return subtaskId;
@@ -49,13 +52,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Tasks.Epic{" +
-                "subtaskId=" + subtaskId +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
+        return String.format("%s,%s,%s,%s,%s", getId(), TaskType.EPIC, getName(), getStatus(), getDescription());
     }
 
 

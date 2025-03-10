@@ -74,10 +74,10 @@ public class Main {
         Task task1 = new Task("Task1", "Description Task1", TaskStatus.NEW);
         task1 = manager.addTask(task1);
 
-        Task task2 = new Task("Task2", "Description Task2", TaskStatus.NEW);
+        Task task2 = new Task("Task2", "Description Task2", TaskStatus.DONE);
         task2 = manager.addTask(task2);
 
-        Epic epic1 = new Epic("Epic1", "Description Epic1", TaskStatus.NEW);
+        Epic epic1 = new Epic("Epic1", "Description Epic1", TaskStatus.DONE);
         epic1 = manager.addEpic(epic1);
 
         Subtask subtask1 = new Subtask("Subtask1", "Description Subtask1",

@@ -1,5 +1,7 @@
 package tasks;
 
+import fileManagers.TaskType;
+
 import java.util.Objects;
 
 public class Task {
@@ -74,13 +76,8 @@ public class Task {
     }
 
     @Override
-    public String toString() {
-        return "Tasks.Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
+    public String toString() { // Переопределение метода для адекватной печати имени класса
+        return String.format("%s,%s,%s,%s,%s", getId(), TaskType.TASK, getName(), getStatus(), getDescription());
     }
 }
 
