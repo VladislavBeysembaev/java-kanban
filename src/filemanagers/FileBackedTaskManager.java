@@ -1,4 +1,4 @@
-package Filemanagers;
+package filemanagers;
 
 import exception.ManagerSaveException;
 import managers.InMemoryTaskManager;

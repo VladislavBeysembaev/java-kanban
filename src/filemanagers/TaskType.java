@@ -1,4 +1,4 @@
-package Filemanagers;
+package filemanagers;
 
 public enum TaskType {
     TASK,
