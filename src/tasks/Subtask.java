@@ -1,6 +1,5 @@
 package tasks;
 
-import filemanagers.TaskType;
 
 import java.util.Objects;
 
