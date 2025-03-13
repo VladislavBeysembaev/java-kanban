@@ -50,4 +50,6 @@ public interface TaskManager {
     ArrayList<Subtask> getSubtasksList(int idNumber);
 
     List<Task> getHistory();
+
+    int getIdCounter();
 }

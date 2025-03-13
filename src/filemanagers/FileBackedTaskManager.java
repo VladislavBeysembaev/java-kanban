@@ -14,68 +14,83 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    public FileBackedTaskManager(File file) {
-        this.file = new File(file.getAbsolutePath());
+    private FileBackedTaskManager(File file) {
+        this.file = file;
     }
 
-    public void save() throws ManagerSaveException {
+    private void save() throws ManagerSaveException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("id,type,name,status,description,epic");
+            writer.write(CsvConverter.CSV_HEADER);
             writer.newLine();
 
-            List<Task> tasks = getTaskList();
-            for (Task task : tasks) {
-                writer.write(task.toString());
+            for (Task task : getTasks().values()) {
+                writer.write(CsvConverter.taskToCsv(task));
                 writer.newLine();
             }
 
-            List<Epic> epics = getEpicList();
-            for (Epic epic : epics) {
-                writer.write(epic.toString());
+            for (Epic epic : getEpics().values()) {
+                writer.write(CsvConverter.epicToCsv(epic));
                 writer.newLine();
             }
 
-            List<Subtask> subtasks = getSubtaskList();
-            for (Subtask subtask : subtasks) {
-                writer.write(subtask.toString());
+            for (Subtask subtask : getSubtasks().values()) {
+                writer.write(CsvConverter.subtaskToCsv(subtask));
                 writer.newLine();
             }
-
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при записи в файл: " + e.getMessage());
         }
-
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException, IllegalArgumentException {
+    public void saveToFile() throws ManagerSaveException {
+        save();
+    }
+
+    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
-        // setIdCounter(4); //Объясни пожалуйста, почему без метода вначале строки у нас айди повышается само по себе
-        //но при добавлении этого метода, выдает просто какой-то рандом? Из-за этого не дописал тест( причем если
-        //я отдельно запускаю тест, то все работает, а все вместе нет
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
             reader.readLine(); // Пропускаем заголовок
+            String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 String type = parts[1];
                 String name = parts[2];
-                TaskStatus taskStatus = TaskStatus.valueOf(parts[3]);
+                TaskStatus status = TaskStatus.valueOf(parts[3]);
                 String description = parts[4];
+                int id = Integer.parseInt(parts[0]);
 
                 switch (type) {
                     case "TASK":
-                        Task task = new Task(name, description, taskStatus);
-                        manager.addTask(task);
+                        Task task = new Task(name, description, status);
+                        task.setId(id); // Устанавливаем идентификатор из файла
+                        manager.getTasks().put(id, task); // Добавляем задачу в мапу
                         break;
+
                     case "EPIC":
-                        Epic epic = new Epic(name, description, taskStatus);
-                        manager.addEpic(epic);
+                        Epic epic = new Epic(name, description, status);
+                        epic.setId(id); // Устанавливаем идентификатор из файла
+                        manager.getEpics().put(id, epic); // Добавляем эпик в мапу
                         break;
+
                     case "SUBTASK":
-                        int epicId = Integer.parseInt(parts[5]); // Получаем ID эпика
-                        Subtask subtask = new Subtask(name, description, taskStatus, epicId);
-                        manager.addSubtask(subtask);
+                        int epicId = Integer.parseInt(parts[5]); // Получаем идентификатор эпика
+                        Subtask subtask = new Subtask(name, description, status, epicId);
+                        subtask.setId(id); // Устанавливаем идентификатор из файла
+                        manager.getSubtasks().put(id, subtask); // Добавляем сабтаск в мапу
+
+                        // Добавляем идентификатор сабтаска в список эпика
+                        if (manager.getEpics().containsKey(epicId)) {
+                            manager.getEpics().get(epicId).addSubtaskId(id);
+                        }
                         break;
+
+                    default:
+                        throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
+                }
+
+                // Обновляем счетчик идентификаторов
+                if (id > manager.getIdCounter()) {
+                    FileBackedTaskManager.setIdCounter(id + 1);
                 }
             }
         } catch (IOException e) {
@@ -83,7 +98,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         return manager;
     }
-
 
     @Override
     public Task addTask(Task task) {
@@ -128,6 +142,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void deleteTaskById(int id) {
         super.deleteTaskById(id);
+        save();
+    }
+
+    @Override
+    public void deleteEpicById(int id) {
+        super.deleteEpicById(id);
+        save();
+    }
+
+    @Override
+    public void deleteSubtaskById(int id) {
+        super.deleteSubtaskById(id);
         save();
     }
 

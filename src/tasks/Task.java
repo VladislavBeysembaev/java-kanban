@@ -76,8 +76,12 @@ public class Task {
     }
 
     @Override
-    public String toString() { // Переопределение метода для адекватной печати имени класса
-        return String.format("%s,%s,%s,%s,%s", getId(), TaskType.TASK, getName(), getStatus(), getDescription());
+    public String toString() {
+        return String.format("Task{id=%d, name='%s', status=%s, description='%s'}",
+                getId(),
+                getName(),
+                getStatus(),
+                getDescription());
     }
 }
 

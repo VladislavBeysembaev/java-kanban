@@ -5,6 +5,7 @@ import tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -15,7 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private static int generatorId = 0;
 
-    public static void setIdCounter(int generatorId) {
+    protected static void setIdCounter(int generatorId) {
         InMemoryTaskManager.generatorId = generatorId;
     }
 
@@ -218,12 +219,39 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
+    protected Map<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    protected Map<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    protected Map<Integer, Subtask> getSubtasks() {
+        return subTasks;
+    }
+
+
     @Override
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
+    @Override
+    public int getIdCounter() {
+        return generatorId;
+    }
+
+    // Метод для добавления идентификатора сабтаска в список эпика
+    public void addSubtaskToEpic(int epicId, int subtaskId) {
+        Epic epic = getEpics().get(epicId);
+        if (epic != null) {
+            epic.addSubtaskId(subtaskId);
+        } else {
+            throw new IllegalArgumentException("Эпик с ID " + epicId + " не найден");
+        }
+    }
 }
 
 

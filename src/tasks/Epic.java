@@ -19,6 +19,14 @@ public class Epic extends Task {
         this.subtaskId = subtaskId;
     }
 
+    public void addSubtaskId(int subtaskId) {
+        this.subtaskId.add(subtaskId);
+    }
+
+    // Метод для удаления идентификатора сабтаска
+    public void removeSubtaskId(int subtaskId) {
+        this.subtaskId.remove(Integer.valueOf(subtaskId));
+    }
 
     public ArrayList<Integer> getSubtaskId() {
         return subtaskId;
@@ -52,7 +60,12 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s", getId(), TaskType.EPIC, getName(), getStatus(), getDescription());
+        return String.format("Epic{id=%d, name='%s', status=%s, description='%s', subtaskIds=%s}",
+                getId(),          // %d
+                getName(),        // %s
+                getStatus(),      // %s
+                getDescription(), // %s
+                getSubtaskId());   // %s
     }
 
 
