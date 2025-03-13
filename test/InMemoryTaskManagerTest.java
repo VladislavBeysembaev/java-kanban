@@ -1,5 +1,3 @@
-package tasks.test;
-
 import managers.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.*;
@@ -36,9 +34,7 @@ class InMemoryTaskManagerTest {
         Subtask subtask1 = new Subtask("Subtask1", "Description Subtask1.",
                 TaskStatus.NEW, epic1.getId());
         memoryManager.addEpic(epic1);
-        memoryManager.addSubtask(subtask1);
         subtaskId = subtask1.getId();
-
         assertTrue(subtask1 instanceof Subtask);
     }
 

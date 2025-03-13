@@ -6,13 +6,13 @@ import java.util.Objects;
 public class Epic extends Task {
 
 
-   private ArrayList<Integer> subtaskId = new ArrayList<>();
+    private ArrayList<Integer> subtaskId = new ArrayList<>();
 
-  public Epic(String name, String description, TaskStatus status) {
+    public Epic(String name, String description, TaskStatus status) {
         super(name, description, status);
     }
 
-   public Epic(String name, String description, TaskStatus status, ArrayList<Integer> subtaskId) {
+    public Epic(String name, String description, TaskStatus status, ArrayList<Integer> subtaskId) {
         super(name, description, status);
         this.subtaskId = subtaskId;
     }
@@ -23,6 +23,10 @@ public class Epic extends Task {
 
     public void setSubtaskId(ArrayList<Integer> subtaskId) {
         this.subtaskId = subtaskId;
+    }
+
+    public void removeSubtask(Integer subtask) {
+        subtaskId.remove(subtask);
     }
 
     @Override
