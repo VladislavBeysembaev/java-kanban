@@ -52,33 +52,17 @@ public class CsvConverter {
 
     // Преобразование Task в строку CSV
     public static String toCsv(Task task) {
-        return String.format("%d,%s,%s,%s,%s,-",
-                task.getId(),
-                TaskType.TASK,
-                task.getName(),
-                task.getStatus(),
-                task.getDescription());
+        return String.format("%d,%s,%s,%s,%s,-", task.getId(), TaskType.TASK, task.getName(), task.getStatus(), task.getDescription());
     }
 
     // Преобразование Epic в строку CSV
     public static String toCsv(Epic epic) {
-        return String.format("%d,%s,%s,%s,%s",
-                epic.getId(),
-                TaskType.EPIC,
-                epic.getName(),
-                epic.getStatus(),
-                epic.getDescription());
+        return String.format("%d,%s,%s,%s,%s", epic.getId(), TaskType.EPIC, epic.getName(), epic.getStatus(), epic.getDescription());
     }
 
     // Преобразование Subtask в строку CSV
     public static String toCsv(Subtask subtask) {
-        return String.format("%d,%s,%s,%s,%s,%d",
-                subtask.getId(),
-                TaskType.SUBTASK,
-                subtask.getName(),
-                subtask.getStatus(),
-                subtask.getDescription(),
-                subtask.getEpicId());
+        return String.format("%d,%s,%s,%s,%s,%d", subtask.getId(), TaskType.SUBTASK, subtask.getName(), subtask.getStatus(), subtask.getDescription(), subtask.getEpicId());
     }
 
     // Преобразование строки CSV в Task

@@ -5,11 +5,38 @@ import managers.InMemoryTaskManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
+import tasks.TaskStatus;
 
 import java.io.*;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
+    public static void main(String[] args) {
+        File file = new File("test.csv");
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+        Task task1 = new Task("Сделать домашнее задание", "Дочитать теорию", TaskStatus.NEW);
+        Task task2 = new Task("Сделать домашние дела", "Подготовить вещи к переезду", TaskStatus.NEW);
+
+        fileBackedTaskManager.addTask(task1);
+        fileBackedTaskManager.addTask(task2);
+
+
+        Epic epic1 = new Epic("Доделать работу", "Сдать в назначенное время", TaskStatus.NEW);
+        Epic epic2 = new Epic("Cходить на тренировку", "Сделать упражнения на ноги", TaskStatus.NEW);
+
+        fileBackedTaskManager.addEpic(epic1);
+        fileBackedTaskManager.addEpic(epic2);
+
+        Subtask subtask1 = new Subtask("Сходить в аптку", "Купить Нимесил", TaskStatus.NEW,
+                epic1.getId());
+        Subtask subtask2 = new Subtask("Отвезти кота к ветеринару", "Проверить сердце и сделать справку",
+                TaskStatus.NEW, epic2.getId());
+
+        fileBackedTaskManager.addSubtask(subtask1);
+        fileBackedTaskManager.addSubtask(subtask2);
+
+        fileBackedTaskManager.save();
+    }
 
     private final File file;
 
@@ -51,6 +78,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             // Считываем все задачи в мапы
             while ((line = reader.readLine()) != null) {
                 TaskType type = CsvConverter.getType(line);
+                int id = Integer.parseInt(line.split(",")[0]); // Получаем идентификатор задачи
 
                 switch (type) {
                     case TASK:
@@ -71,6 +99,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     default:
                         throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
                 }
+
+                // Обновляем счетчик идентификаторов напрямую
+                if (id > manager.getIdCounter()) {
+                    manager.setIdCounter(id + 1);
+                }
             }
 
             // Добавляем идентификаторы сабтасков в список эпиков
@@ -79,7 +112,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (manager.getEpics().containsKey(epicId)) {
                     manager.getEpics().get(epicId).addSubtaskId(subtask.getId());
                 } else {
-                    System.out.println("Эпик с ID " + epicId + " не найден. Сабтаск с ID " + subtask.getId() + " не добавлен.");
+                    manager.getSubtasks().remove(subtask.getId()); // Удаляем сабтаск из менеджера
+                    System.err.println("Эпик с ID " + epicId + " не найден. Сабтаск с ID " +
+                            subtask.getId() + " удален из менеджера.");
                 }
             }
         } catch (IOException e) {

@@ -14,10 +14,14 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistoryManager();
 
-    private static int generatorId = 0;
+    private int generatorId = 0;
 
-    protected static void setIdCounter(int generatorId) {
-        InMemoryTaskManager.generatorId = generatorId;
+    protected void setIdCounter(int generatorId) {
+        this.generatorId = generatorId;
+    }
+
+    protected int getIdCounter() {
+        return generatorId;
     }
 
     @Override
@@ -236,11 +240,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
-    }
-
-    @Override
-    public int getIdCounter() {
-        return generatorId;
     }
 
 }
