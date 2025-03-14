@@ -5,7 +5,6 @@ import managers.InMemoryTaskManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import tasks.TaskStatus;
 
 import java.io.*;
 
@@ -24,17 +23,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writer.newLine();
 
             for (Task task : getTasks().values()) {
-                writer.write(CsvConverter.taskToCsv(task));
+                writer.write(CsvConverter.toCsv(task));
                 writer.newLine();
             }
 
             for (Epic epic : getEpics().values()) {
-                writer.write(CsvConverter.epicToCsv(epic));
+                writer.write(CsvConverter.toCsv(epic));
                 writer.newLine();
             }
 
             for (Subtask subtask : getSubtasks().values()) {
-                writer.write(CsvConverter.subtaskToCsv(subtask));
+                writer.write(CsvConverter.toCsv(subtask));
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -42,55 +41,45 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void saveToFile() throws ManagerSaveException {
-        save();
-    }
 
     public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.readLine(); // Пропускаем заголовок
             String line;
+
+            // Считываем все задачи в мапы
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String type = parts[1];
-                String name = parts[2];
-                TaskStatus status = TaskStatus.valueOf(parts[3]);
-                String description = parts[4];
-                int id = Integer.parseInt(parts[0]);
+                TaskType type = CsvConverter.getType(line);
 
                 switch (type) {
-                    case "TASK":
-                        Task task = new Task(name, description, status);
-                        task.setId(id); // Устанавливаем идентификатор из файла
-                        manager.getTasks().put(id, task); // Добавляем задачу в мапу
+                    case TASK:
+                        Task task = CsvConverter.lineToTask(line);
+                        manager.getTasks().put(task.getId(), task);
                         break;
 
-                    case "EPIC":
-                        Epic epic = new Epic(name, description, status);
-                        epic.setId(id); // Устанавливаем идентификатор из файла
-                        manager.getEpics().put(id, epic); // Добавляем эпик в мапу
+                    case EPIC:
+                        Epic epic = CsvConverter.lineToEpic(line);
+                        manager.getEpics().put(epic.getId(), epic);
                         break;
 
-                    case "SUBTASK":
-                        int epicId = Integer.parseInt(parts[5]); // Получаем идентификатор эпика
-                        Subtask subtask = new Subtask(name, description, status, epicId);
-                        subtask.setId(id); // Устанавливаем идентификатор из файла
-                        manager.getSubtasks().put(id, subtask); // Добавляем сабтаск в мапу
-
-                        // Добавляем идентификатор сабтаска в список эпика
-                        if (manager.getEpics().containsKey(epicId)) {
-                            manager.getEpics().get(epicId).addSubtaskId(id);
-                        }
+                    case SUBTASK:
+                        Subtask subtask = CsvConverter.lineToSubtask(line);
+                        manager.getSubtasks().put(subtask.getId(), subtask);
                         break;
 
                     default:
                         throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
                 }
+            }
 
-                // Обновляем счетчик идентификаторов
-                if (id > manager.getIdCounter()) {
-                    FileBackedTaskManager.setIdCounter(id + 1);
+            // Добавляем идентификаторы сабтасков в список эпиков
+            for (Subtask subtask : manager.getSubtasks().values()) {
+                int epicId = subtask.getEpicId();
+                if (manager.getEpics().containsKey(epicId)) {
+                    manager.getEpics().get(epicId).addSubtaskId(subtask.getId());
+                } else {
+                    System.out.println("Эпик с ID " + epicId + " не найден. Сабтаск с ID " + subtask.getId() + " не добавлен.");
                 }
             }
         } catch (IOException e) {
@@ -155,6 +144,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteSubtaskById(int id) {
         super.deleteSubtaskById(id);
         save();
+    }
+
+    @Override
+    public Task updateTask(Task task) {
+        super.updateTask(task);
+        save();
+        return task;
+    }
+
+    @Override
+    public Epic updateEpic(Epic epic) {
+        super.updateEpic(epic);
+        save();
+        return epic;
+    }
+
+    @Override
+    public Subtask updateSubtask(Subtask subtask) {
+        super.updateSubtask(subtask);
+        save();
+        return subtask;
     }
 
 }

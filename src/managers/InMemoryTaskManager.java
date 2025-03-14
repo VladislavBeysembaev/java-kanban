@@ -243,15 +243,6 @@ public class InMemoryTaskManager implements TaskManager {
         return generatorId;
     }
 
-    // Метод для добавления идентификатора сабтаска в список эпика
-    public void addSubtaskToEpic(int epicId, int subtaskId) {
-        Epic epic = getEpics().get(epicId);
-        if (epic != null) {
-            epic.addSubtaskId(subtaskId);
-        } else {
-            throw new IllegalArgumentException("Эпик с ID " + epicId + " не найден");
-        }
-    }
 }
 
 

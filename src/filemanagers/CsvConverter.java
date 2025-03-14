@@ -11,8 +11,47 @@ public class CsvConverter {
     // Заголовок CSV-файла
     public static final String CSV_HEADER = "epicId,type,name,status,description,epic";
 
+    public static TaskType getType(String line) {
+        String[] parts = line.split(",");
+        return TaskType.valueOf(parts[1]);
+    }
+
+    public static Task lineToTask(String line) {
+        String[] parts = line.split(",");
+        int id = Integer.parseInt(parts[0]);
+        String name = parts[2];
+        TaskStatus status = TaskStatus.valueOf(parts[3]);
+        String description = parts[4];
+        Task task = new Task(name, description, status);
+        task.setId(id);
+        return task;
+    }
+
+    public static Epic lineToEpic(String line) {
+        String[] parts = line.split(",");
+        int id = Integer.parseInt(parts[0]);
+        String name = parts[2];
+        TaskStatus status = TaskStatus.valueOf(parts[3]);
+        String description = parts[4];
+        Epic epic = new Epic(name, description, status);
+        epic.setId(id);
+        return epic;
+    }
+
+    public static Subtask lineToSubtask(String line) {
+        String[] parts = line.split(",");
+        int id = Integer.parseInt(parts[0]);
+        String name = parts[2];
+        TaskStatus status = TaskStatus.valueOf(parts[3]);
+        String description = parts[4];
+        int epicId = Integer.parseInt(parts[5]);
+        Subtask subtask = new Subtask(name, description, status, epicId);
+        subtask.setId(id);
+        return subtask;
+    }
+
     // Преобразование Task в строку CSV
-    public static String taskToCsv(Task task) {
+    public static String toCsv(Task task) {
         return String.format("%d,%s,%s,%s,%s,-",
                 task.getId(),
                 TaskType.TASK,
@@ -22,19 +61,17 @@ public class CsvConverter {
     }
 
     // Преобразование Epic в строку CSV
-    public static String epicToCsv(Epic epic) {
-        String subtaskIdsCsv = String.join(",", epic.getSubtaskId().stream().map(String::valueOf).toList());
-        return String.format("%d,%s,%s,%s,%s,%s",
+    public static String toCsv(Epic epic) {
+        return String.format("%d,%s,%s,%s,%s",
                 epic.getId(),
                 TaskType.EPIC,
                 epic.getName(),
                 epic.getStatus(),
-                epic.getDescription(),
-                subtaskIdsCsv.isEmpty() ? "-" : subtaskIdsCsv);
+                epic.getDescription());
     }
 
     // Преобразование Subtask в строку CSV
-    public static String subtaskToCsv(Subtask subtask) {
+    public static String toCsv(Subtask subtask) {
         return String.format("%d,%s,%s,%s,%s,%d",
                 subtask.getId(),
                 TaskType.SUBTASK,
