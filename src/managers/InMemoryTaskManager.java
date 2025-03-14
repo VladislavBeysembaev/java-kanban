@@ -5,6 +5,7 @@ import tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -15,6 +16,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     private int generatorId = 0;
 
+    protected void setIdCounter(int generatorId) {
+        this.generatorId = generatorId;
+    }
+
+    protected int getIdCounter() {
+        return generatorId;
+    }
 
     @Override
     public Task addTask(Task task) {
@@ -39,9 +47,6 @@ public class InMemoryTaskManager implements TaskManager {
         final int id = ++generatorId;
         subtask.setId(id);
         subTasks.put(subtask.getId(), subtask);
-        Epic epic = epics.get(subtask.getEpicId());
-        epic.getSubtaskId().add(subtask.getId());
-        updateSubtask(subtask);
         return subtask;
     }
 
@@ -153,14 +158,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteTaskById(int id) {
         historyManager.remove(id);
         tasks.remove(id);
-        Subtask subtask = subTasks.get(id);
-        Epic epic = epics.get(subtask.getEpicId());
-        historyManager.remove(epic.getId());
-        deleteSubtasks();
-        subTasks.remove(id);
-        changeEpicStatus(epic.getId());
-        historyManager.remove(subtask.getId());
-        epics.remove(id);
     }
 
     @Override
@@ -225,6 +222,19 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStatus(status);
 
     }
+
+    protected Map<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    protected Map<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    protected Map<Integer, Subtask> getSubtasks() {
+        return subTasks;
+    }
+
 
     @Override
 
